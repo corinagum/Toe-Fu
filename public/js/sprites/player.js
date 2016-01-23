@@ -24,7 +24,6 @@
 
     // play the initial animation
     this.animations.play(ANIMATIONS.IDLE.name, ANIMATIONS.IDLE.fps, true); // true is for looping
-
   };
 
   // extend Sprite prototype
