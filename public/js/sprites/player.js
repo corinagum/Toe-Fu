@@ -14,6 +14,12 @@
     RIGHT : 1
   };
 
+  function select_sprite_row(player_id) {
+    return function(frame_id) {
+      return frame_id + player_id*ToeFu.ASSETS.SPRITESHEET.PLAYER.frames_per_row;
+    };
+  }
+
   // sprite class constructor
 
   ToeFu.Player = function(game, id, name) {
@@ -26,8 +32,11 @@
     // super constructor call
     Phaser.Sprite.call(this, game, 0, 0, ToeFu.ASSETS.SPRITESHEET.PLAYER.name);
 
+    // set center registration point
+    this.anchor = { x : 0.5 , y: 0.5 };
+
     // set animations
-    this.animations.add(ANIMATIONS.IDLE.name, ANIMATIONS.IDLE.frames);
+    this.animations.add(ANIMATIONS.IDLE.name, ANIMATIONS.IDLE.frames.map(select_sprite_row(this.id)));
 
     // play the initial animation
     this.animations.play(ANIMATIONS.IDLE.name, ANIMATIONS.IDLE.fps, true); // true is for looping
