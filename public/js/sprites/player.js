@@ -9,12 +9,19 @@
     }
   };
 
+  var FACING_FACTOR = {
+    LEFT : -1,
+    RIGHT : 1
+  };
+
   // sprite class constructor
 
   ToeFu.Player = function(game, id, name) {
     this.game = game;
     this.id = id;
     this.name = name ? name : 'Player '+(id+1);
+    this.facing; // direction that player is facing, state updates this
+
 
     // super constructor call
     Phaser.Sprite.call(this, game, 0, 0, ToeFu.ASSETS.SPRITESHEET.PLAYER.name);
@@ -32,5 +39,18 @@
       value: ToeFu.Player
     }
   });
+
+  // public static variable
+  ToeFu.Player.FACING = {
+    LEFT : 'LEFT',
+    RIGHT : 'RIGHT'
+  };
+
+  // is invoked on every frame
+  ToeFu.Player.prototype.update = function() {
+    //update facing
+    this.scale.x = FACING_FACTOR[ this.facing ];
+
+  };
 
 })();
