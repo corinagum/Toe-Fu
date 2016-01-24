@@ -61,6 +61,9 @@ var ANIMATIONS = {
     // enable physics (adds this.body)
     this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
+     // use stage bounding box
+    this.body.collideWorldBounds = true;
+
     // set center registration point
     this.anchor = { x : 0.5 , y: 0.5 };
 
@@ -93,8 +96,10 @@ var ANIMATIONS = {
 
   // is invoked on every frame
   ToeFu.Player.prototype.update = function() {
-    //update facing
-    this.scale.x = FACING_FACTOR[ this.facing ];
+    // update facing
+       if( this.alive ){
+         this.scale.x = FACING_FACTOR[ this.facing ];
+       }
     // update animations
        if(!this.alive){
          this.animations.play(ANIMATIONS.DEAD.name);
@@ -130,7 +135,7 @@ var ANIMATIONS = {
   // Input actions
   ToeFu.Player.prototype.jump = function() {
     // allow jumping from the floor (not in mid air)
-
+    if(!this.alive) return;
     if( this.body.y === ToeFu.Game.FLOOR_Y ){
       this.body.velocity.y = -JUMP_HEIGHT;
     } else if( this.is_diving ){ // allow jump after dive (in mid air)
@@ -139,6 +144,7 @@ var ANIMATIONS = {
 
   };
   ToeFu.Player.prototype.dive = function() {
+    if(!this.alive) return;
     if( this.body.y < ToeFu.Game.FLOOR_Y ){
       this.body.velocity.y = DIVE_SPEED;
       this.body.velocity.x = DIVE_DISTANCE * FACING_FACTOR[ this.facing ];
@@ -150,6 +156,7 @@ var ANIMATIONS = {
     }
   };
   ToeFu.Player.prototype.dive_stop = function() {
+    if(!this.alive) return;
     // reset velocity
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
@@ -158,9 +165,11 @@ var ANIMATIONS = {
     }.bind(this), DIVE_JUMP_TIMEOUT);
   };
   ToeFu.Player.prototype.step_left = function() {
+    if(!this.alive) return;
     this.body.velocity.x = -WALKSPEED;
   };
   ToeFu.Player.prototype.step_right = function() {
+    if(!this.alive) return;
     this.body.velocity.x = WALKSPEED;
 
   };
